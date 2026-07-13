@@ -634,6 +634,23 @@
       border-color: var(--signal);
     }
 
+    .project-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-end;
+    }
+
+    @media (max-width: 620px) {
+      .project-links {
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+        width: 100%;
+        margin-top: 10px;
+      }
+    }
+
     .project-desc {
       color: var(--muted);
       font-size: 14.5px;
@@ -983,8 +1000,10 @@
             <div class="project-name">Compylr</div>
             <span class="project-tag">Sandboxed Code Execution Platform</span>
           </div>
-          <a class="project-link" href="https://compylr.vercel.app" target="_blank"
-            rel="noopener">compylr.vercel.app</a>
+          <div class="project-links">
+            <a class="project-link" href="https://github.com/raftywate/BitSmith" target="_blank" rel="noopener">source →</a>
+            <a class="project-link" href="https://bit-smith-kappa.vercel.app/problems" target="_blank" rel="noopener">live demo →</a>
+          </div>
         </div>
         <p class="project-desc">
           A competitive-programming judge that executes untrusted code safely at scale, Docker
@@ -1024,7 +1043,10 @@
             <div class="project-name">ShardLink</div>
             <span class="project-tag">Distributed URL Shortener</span>
           </div>
-          <a class="project-link" href="https://github.com/raftywate" target="_blank" rel="noopener">source →</a>
+          <div class="project-links">
+            <a class="project-link" href="https://github.com/raftywate" target="_blank" rel="noopener">source →</a>
+            <a class="project-link" href="https://url-shortener-with-consistent-hashi.vercel.app/" target="_blank" rel="noopener">live demo →</a>
+          </div>
         </div>
         <p class="project-desc">
           A URL shortener built around the problem that actually matters at scale: what happens to
