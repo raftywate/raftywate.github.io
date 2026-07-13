@@ -746,10 +746,65 @@
     #nav-up:hover {
       transform: translateY(-3px);
     }
+
+    /* ---------- Custom Cursor ---------- */
+    .custom-cursor {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      will-change: transform;
+      opacity: 0;
+    }
+    .custom-cursor.dot {
+      width: 6px;
+      height: 6px;
+      background-color: var(--signal);
+      transition: opacity 0.3s ease, width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+    }
+    .custom-cursor.ring {
+      width: 26px;
+      height: 26px;
+      border: 1.5px solid var(--signal);
+      background-color: transparent;
+      transition: opacity 0.3s ease, width 0.2s ease, height 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+    }
+    
+    @media (hover: hover) and (pointer: fine) {
+      html, body {
+        cursor: none;
+      }
+      input, textarea, select {
+        cursor: auto;
+      }
+      a, button, .cbtn, .theme-btn, .tech-pill, .project-link, #nav-up {
+        cursor: none;
+      }
+      .custom-cursor {
+        display: block;
+      }
+      body.cursor-hover .custom-cursor.dot {
+        width: 4px;
+        height: 4px;
+        background-color: var(--amber);
+      }
+      body.cursor-hover .custom-cursor.ring {
+        width: 38px;
+        height: 38px;
+        border-color: var(--amber);
+        background-color: var(--amber-dim);
+      }
+    }
   </style>
 </head>
 
 <body>
+  <div class="custom-cursor dot" id="custom-dot"></div>
+  <div class="custom-cursor ring" id="custom-ring"></div>
+
   <button id="nav-up" aria-label="Go up" onclick="window.scrollTo({top:0,behavior:'smooth'})"
     style="position:fixed;bottom:24px;right:24px;z-index:9999;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:#5B8DEF;border:none;border-radius:10px;color:#fff;cursor:pointer;opacity:0;pointer-events:none;box-shadow:0 4px 16px rgba(0,0,0,0.3)">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
@@ -811,7 +866,7 @@
       <div class="role-line">Software Engineer @ LTM(formerly LTI-Mindtree) → looking for SDE-1, product engineering</div>
       <p class="hero-sub">
         I build distributed systems, sandboxed execution environments, and scalable backend
-        architecture — most recently a Docker-sandboxed code judge with async submission queues,
+        architecture, most recently a Docker-sandboxed code judge with async submission queues,
         and a distributed URL shortener built around consistent hashing. I care about the parts
         of a system that only show up under concurrency and scale.
       </p>
@@ -1029,6 +1084,60 @@
   <footer>building for scale, one system at a time — abhishek, 2026</footer>
 
   <script>
+    // ---- Custom Cursor ----
+    if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      const dot = document.getElementById('custom-dot');
+      const ring = document.getElementById('custom-ring');
+      
+      let mouseX = 0, mouseY = 0;
+      let ringX = 0, ringY = 0;
+      let isVisible = false;
+      
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        if (!isVisible) {
+          dot.style.opacity = '1';
+          ring.style.opacity = '1';
+          isVisible = true;
+        }
+      }, { passive: true });
+      
+      function animateCursor() {
+        ringX += (mouseX - ringX) * 0.15;
+        ringY += (mouseY - ringY) * 0.15;
+        
+        dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate3d(-50%, -50%, 0)`;
+        ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate3d(-50%, -50%, 0)`;
+        
+        requestAnimationFrame(animateCursor);
+      }
+      animateCursor();
+      
+      document.addEventListener('mouseleave', () => {
+        dot.style.opacity = '0';
+        ring.style.opacity = '0';
+        isVisible = false;
+      });
+      document.addEventListener('mouseenter', () => {
+        dot.style.opacity = '1';
+        ring.style.opacity = '1';
+        isVisible = true;
+      });
+
+      const interactives = 'a, button, [role="button"], .cbtn, .theme-btn, .tech-pill, .project-link';
+      document.addEventListener('mouseover', (e) => {
+        if (e.target.closest(interactives)) {
+          document.body.classList.add('cursor-hover');
+        }
+      });
+      document.addEventListener('mouseout', (e) => {
+        if (e.target.closest(interactives)) {
+          document.body.classList.remove('cursor-hover');
+        }
+      });
+    }
+
     // ---- Theme toggle ----
     const STORAGE_KEY = 'portfolio-theme';
     const root = document.documentElement;
