@@ -1081,7 +1081,7 @@
   </section>
   </main>
 
-  <footer>building for scale, one system at a time — abhishek, 2026</footer>
+  <footer>building for scale, one system at a time — raftywate, <span id="current-year">2026</span></footer>
 
   <script>
     // ---- Custom Cursor ----
@@ -1189,6 +1189,9 @@
     }
     updateClock();
     setInterval(updateClock, 30000);
+
+    // ---- Dynamic Year ----
+    document.getElementById('current-year').textContent = new Date().getFullYear();
 
     // Scroll-to-top visibility
     const scrollBtn = document.getElementById('nav-up');
